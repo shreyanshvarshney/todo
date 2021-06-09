@@ -1,0 +1,26 @@
+<div class="mt-5">
+    <mat-card>
+        <mat-card-header>
+          <mat-card-title>Create your todo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="w-100 text-center">
+            <div [formGroup]="todoForm">
+                <mat-form-field class="w-75">
+                    <mat-label>Title</mat-label>
+                    <input formControlName="title" matInput name="title">
+                    <!-- <mat-error *ngIf=""</mat-error> -->
+                </mat-form-field>
+                <mat-form-field class="w-75">
+                    <mat-label>Write todo here</mat-label>
+                    <textarea formControlName="content" rows="6" cols="10" name="content" matInput></textarea>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button (click)="addTodo(todoForm)" type="button">Add</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<div class="mt-5">
+    <app-todo-list></app-todo-list>
+</div>
