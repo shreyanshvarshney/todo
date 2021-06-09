@@ -6,17 +6,27 @@
         <mat-card-content class="w-100 text-center">
             <div [formGroup]="todoForm">
                 <mat-form-field class="w-75">
-                    <mat-label>Title</mat-label>
+                    <mat-label>Todo Title</mat-label>
                     <input formControlName="title" matInput name="title">
-                    <!-- <mat-error *ngIf=""</mat-error> -->
+                    <mat-error *ngIf="title.errors && title.touched">
+                        <div *ngIf="title.errors?.required">
+                            This field cannot be left blank
+                        </div>
+                        <div *ngIf="title.errors?.minlength">
+                            Title should contain atleast {{title.errors?.minlength.requiredLength}} characters
+                        </div>
+                    </mat-error>
                 </mat-form-field>
                 <mat-form-field class="w-75">
-                    <mat-label>Write todo here</mat-label>
+                    <mat-label>Todo Content</mat-label>
                     <textarea formControlName="content" rows="6" cols="10" name="content" matInput></textarea>
+                    <mat-error *ngIf="content.invalid">
+                        This field cannot be left blank
+                    </mat-error>
                 </mat-form-field>
             </div>
         </mat-card-content>
-        <mat-card-actions>
+        <mat-card-actions class="text-center">
           <button mat-raised-button (click)="addTodo(todoForm)" type="button">Add</button>
         </mat-card-actions>
     </mat-card>

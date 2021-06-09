@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TodoService } from 'src/service/todo.service';
+import { Todo } from './../../../data-models/todo.model';
 
 @Component({
   selector: 'app-todo-list',
@@ -8,12 +9,20 @@ import { TodoService } from 'src/service/todo.service';
 })
 export class TodoListComponent implements OnInit {
 
-  todos: any[];
+  todos: Todo[] = [];
 
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    this.todos = this.todoService.getTodos();
+    // Everytime any changes occures in todo-service todos array,
+    // we will be notified here and angular change detection mechanism will updated the ui accordingly. 
+    this.todoService.getTodosUpdateListener().subscribe((data: Todo[]) => {
+      this.todos = data;
+    });
+  }
+
+  deleteTodo(item: Todo) {
+    this.todoService.deleteTodo(item);
   }
 
 }

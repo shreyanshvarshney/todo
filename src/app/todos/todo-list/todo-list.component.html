@@ -1,4 +1,4 @@
-<mat-accordion multi="true" *ngIf="todos; else emptyView">
+<mat-accordion multi="true" *ngIf="todos.length>0; else emptyView;">
     <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -9,6 +9,14 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
         <p>{{ item.content }}</p>
+        <mat-action-row>
+          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button (click)="deleteTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <i class="fa fa-trash"></i>
+          </button>
+        </mat-action-row>
     </mat-expansion-panel>
 </mat-accordion>
 <ng-template #emptyView>

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TodoService } from './../../../service/todo.service';
 
@@ -19,10 +19,9 @@ export class TodoCreateComponent implements OnInit {
 
   initailizeForm() {
     this.todoForm = this.fb.group({
-      title: new FormControl('',Validators.required),
+      title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       content: new FormControl('', Validators.required)
     });
-    
   }
 
   addTodo(form: FormGroup) {
@@ -32,9 +31,9 @@ export class TodoCreateComponent implements OnInit {
         dateCreated: new Date()
       }
       this.todoService.addTodo(obj);
-      // form.reset();
+      form.reset();
     } else {
-      alert('Please enter all deatails.');
+      alert('Please enter all required deatails.');
     }
   }
 
