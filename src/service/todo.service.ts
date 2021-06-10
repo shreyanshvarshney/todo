@@ -21,7 +21,11 @@ export class TodoService {
   // This is of no use now, after Implementing Subject rxjs operator.
   getTodos() {
     // return [...this.todos];
-    return this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi);
+    this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi)
+    .subscribe((res) => {
+      this.todos = res.todos;
+      this.todosUpdate.next([...this.todos]);
+    });
   }
 
   getTodosUpdateListener() {
@@ -30,15 +34,17 @@ export class TodoService {
   }
 
   addTodo(data: Todo) {
-    this.todos.push(data);
     // Emitting an event using Subject or Behaviourial Subject.
     // Emitting data array as a copy of original todo array becoz to avoid unnecessary data manupulation.
     // this.todosUpdate.next([...this.todos]);
-    const finalData = {
-      ...data
-      // id: null
-    };
-    return this.http.post<{message:string}>(TodoApis.getTodosApi, finalData);
+
+    // Will add the id property in my backend.
+    this.http.post<{message:string}>(TodoApis.getTodosApi, data)
+    .subscribe((res) => {
+      console.log(res.message);
+      this.todos.push(data);
+      this.todosUpdate.next([...this.todos]);
+    });
   }
 
   deleteTodo(item: Todo) {

@@ -30,14 +30,8 @@ export class TodoCreateComponent implements OnInit {
         ...form.value,
         dateCreated: new Date()
       }
-      this.todoService.addTodo(obj).subscribe((res) => {
-        console.log(res?.message);
-      },
-      (error) => {
-        console.log(error);
-      });
+      this.todoService.addTodo(obj);
       form.reset();
-      window.location.reload();
     } else {
       alert('Please enter all required deatails.');
     }
