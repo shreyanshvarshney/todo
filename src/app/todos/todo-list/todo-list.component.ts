@@ -14,10 +14,10 @@ export class TodoListComponent implements OnInit {
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    // Everytime any changes occures in todo-service todos array,
+    // Everytime the next() method of Subject is called (any changes occures) in todo-service todos array,
     // we will be notified here and angular change detection mechanism will updated the ui accordingly. 
-    this.todoService.getTodosUpdateListener().subscribe((data: Todo[]) => {
-      this.todos = data;
+    this.todoService.getTodos().subscribe((data) => {
+      this.todos = data?.todos;
     });
   }
 

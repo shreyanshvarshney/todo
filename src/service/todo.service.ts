@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Todo } from './../data-models/todo.model';
+import { TodoApis } from './../app/apis/apis';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +14,14 @@ export class TodoService {
   // I have made this subject private becoz I dont want that other components to emit data(call next() method of this subject).
   private todosUpdate = new Subject<Todo[]>();
 
-  constructor() { } 
+  constructor(private http: HttpClient) {
+    this.http.get(TodoApis.getTodosApi).subscribe(data => console.log(data));
+  } 
 
   // This is of no use now, after Implementing Subject rxjs operator.
   getTodos() {
-    return [...this.todos];
+    // return [...this.todos];
+    return this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi);
   }
 
   getTodosUpdateListener() {
@@ -28,7 +33,12 @@ export class TodoService {
     this.todos.push(data);
     // Emitting an event using Subject or Behaviourial Subject.
     // Emitting data array as a copy of original todo array becoz to avoid unnecessary data manupulation.
-    this.todosUpdate.next([...this.todos]);
+    // this.todosUpdate.next([...this.todos]);
+    const finalData = {
+      ...data
+      // id: null
+    };
+    return this.http.post<{message:string}>(TodoApis.getTodosApi, finalData);
   }
 
   deleteTodo(item: Todo) {
