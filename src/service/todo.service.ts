@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AlertService } from './alert.service';
 
 import { Todo } from './../data-models/todo.model';
 import { TodoApis } from './../app/apis/apis';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class TodoService {
   // I have made this subject private becoz I dont want that other components to emit data(call next() method of this subject).
   private todosUpdate = new Subject<Todo[]>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private alertService: AlertService) {
     this.http.get(TodoApis.getTodosApi).subscribe(data => console.log(data));
   } 
 
@@ -22,8 +24,21 @@ export class TodoService {
   getTodos() {
     // return [...this.todos];
     this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi)
+    .pipe(
+      map((response) => {
+        return response.todos.map((res: any) => {
+          return {
+            id: res._id,
+            title: res.title,
+            content: res.content,
+            dateCreated: res.dateCreated
+          };
+        });
+      }),
+    )
     .subscribe((res) => {
-      this.todos = res.todos;
+      console.log(res);
+      this.todos = res;
       this.todosUpdate.next([...this.todos]);
     });
   }
@@ -39,15 +54,25 @@ export class TodoService {
     // this.todosUpdate.next([...this.todos]);
 
     // Will add the id property in my backend.
-    this.http.post<{message:string}>(TodoApis.getTodosApi, data)
+    this.http.post<{message: string, todoId: string}>(TodoApis.getTodosApi, data)
     .subscribe((res) => {
       console.log(res.message);
+      // Objects in TS are refrenece types so I can access object properties and update them.
+      data.id = res.todoId;
+      console.log(data);
       this.todos.push(data);
       this.todosUpdate.next([...this.todos]);
+      this.alertService.openSnackBar("Added Successfully");
     });
   }
 
   deleteTodo(item: Todo) {
+    this.http.delete<{message: string}>(TodoApis.deleteTodoApi + item.id)
+    .subscribe((data) => {
+      console.log(data.message)
+      this.alertService.openSnackBar("Deleted Successfully");
+    });
+
     const todoIndex = this.todos.indexOf(item,0);
     this.todos.splice(todoIndex,1);
     this.todosUpdate.next([...this.todos]);
