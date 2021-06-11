@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { AlertService } from './alert.service';
 
 import { Todo } from './../data-models/todo.model';
 import { TodoApis } from './../app/apis/apis';
 import { map } from 'rxjs/operators';
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +19,7 @@ export class TodoService {
   // I have made this subject private becoz I dont want that other components to emit data(call next() method of this subject).
   private todosUpdate = new Subject<Todo[]>();
 
-  constructor(private http: HttpClient, private alertService: AlertService) {
-    this.http.get(TodoApis.getTodosApi).subscribe(data => console.log(data));
-  } 
+  constructor(private http: HttpClient, private alertService: AlertService, private router: Router) { } 
 
   // This is of no use now, after Implementing Subject rxjs operator.
   getTodos() {
@@ -59,10 +60,10 @@ export class TodoService {
       console.log(res.message);
       // Objects in TS are refrenece types so I can access object properties and update them.
       data.id = res.todoId;
-      console.log(data);
       this.todos.push(data);
       this.todosUpdate.next([...this.todos]);
       this.alertService.openSnackBar("Added Successfully");
+      this.router.navigate(['/']);
     });
   }
 
@@ -76,6 +77,26 @@ export class TodoService {
     const todoIndex = this.todos.indexOf(item,0);
     this.todos.splice(todoIndex,1);
     this.todosUpdate.next([...this.todos]);
+  }
+
+  getTodo(todoId: string) {
+    return this.http.get<{todo: Todo}>(TodoApis.getTodoApi + todoId)
+    .pipe(
+      map((res: any) => {
+        return {
+          id: res.todo._id,
+          title: res.todo.title,
+          content: res.todo.content,
+          dateCreated: res.todo.dateCreated
+        };
+      }),
+    );
+  }
+
+  updateTodo(data: Todo, todoId: string) {
+    // console.log(data);
+    data.id = todoId;
+    return this.http.patch<{message: string}>(TodoApis.updateTodoApi + todoId, data);
   }
 
 }

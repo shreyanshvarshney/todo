@@ -1,5 +1,6 @@
 <div class="mt-5">
-    <mat-card>
+    <mat-spinner *ngIf="isLoading" class="m-auto" diameter="30"></mat-spinner>
+    <mat-card *ngIf="!isLoading">
         <mat-card-header>
           <mat-card-title>Create your todo</mat-card-title>
         </mat-card-header>
@@ -27,10 +28,8 @@
             </div>
         </mat-card-content>
         <mat-card-actions class="text-center">
-          <button mat-raised-button (click)="addTodo(todoForm)" type="button">Add</button>
+          <button *ngIf="!todoId" mat-raised-button (click)="saveTodo(todoForm)" type="button">Add</button>
+          <button *ngIf="todoId" mat-raised-button (click)="saveTodo(todoForm)" type="button">Update</button>
         </mat-card-actions>
     </mat-card>
-</div>
-<div class="mt-5">
-    <app-todo-list></app-todo-list>
 </div>

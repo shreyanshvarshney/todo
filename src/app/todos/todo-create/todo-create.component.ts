@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { take, map } from 'rxjs/operators';
 import { TodoService } from './../../../service/todo.service';
+import { AlertService } from './../../../service/alert.service';
+import { Todo } from './../../../data-models/todo.model';
 
 @Component({
   selector: 'app-todo-create',
@@ -10,11 +14,31 @@ import { TodoService } from './../../../service/todo.service';
 export class TodoCreateComponent implements OnInit {
 
   todoForm: FormGroup;
+  todoId: string;
+  private todoData: Todo;
+  isLoading = false;
 
-  constructor(private fb: FormBuilder, private todoService: TodoService) { }
+  constructor(private route: ActivatedRoute, 
+              private todoService: TodoService, 
+              private fb: FormBuilder,
+              private alertService: AlertService,
+              private router: Router) {
+               
+                this.route.paramMap.pipe(
+                  take(1)
+                ).subscribe((params: ParamMap) => {
+                  if (params.has('id')) {
+                    this.todoId = params.get('id')
+                  } else this.todoId = null;
+                  // console.log(params);
+                });
+              }
 
   ngOnInit(): void {
     this.initailizeForm();
+    if (this.todoId !== null && this.todoId) {
+      this.loadTodoData();
+    }
   }
 
   initailizeForm() {
@@ -24,17 +48,42 @@ export class TodoCreateComponent implements OnInit {
     });
   }
 
-  addTodo(form: FormGroup) {
+  saveTodo(form: FormGroup) {
     if (form.valid) {
-      const obj = {
-        ...form.value,
-        dateCreated: new Date()
+      if(!this.todoId) {
+        const obj = {
+          ...form.value,
+          dateCreated: new Date()
+        }
+        this.todoService.addTodo(obj);
+        form.reset();
+      } else {
+        this.todoService.updateTodo(form.value, this.todoId)
+        .subscribe((result) => {
+          console.log(result.message);
+          this.alertService.openSnackBar("Updated Successfully.");
+          this.router.navigate(['/']);
+        });
       }
-      this.todoService.addTodo(obj);
-      form.reset();
     } else {
       alert('Please enter all required deatails.');
     }
+  }
+
+  loadTodoData() {
+    this.isLoading = true;
+    this.todoService.getTodo(this.todoId)
+    .subscribe((result) => {
+      // console.log(result);
+      this.todoData = result;
+      this.isLoading = false;
+      this.prefillForm(result);
+    });
+  }
+
+  prefillForm(data: Todo) {
+    this.todoForm.controls.title.setValue(data?.title);
+    this.todoForm.controls.content.setValue(data?.content);
   }
 
   get title() {

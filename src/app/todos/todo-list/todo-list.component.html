@@ -1,24 +1,29 @@
-<mat-accordion multi="true" *ngIf="todos.length>0; else emptyView;">
-    <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ item.title }}
-          </mat-panel-title>
-          <mat-panel-description>
-            {{ item.dateCreated | date:'medium' }}
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>{{ item.content }}</p>
-        <mat-action-row>
-          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-            <i class="fa fa-edit"></i>
-          </button>
-          <button (click)="deleteTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-            <i class="fa fa-trash"></i>
-          </button>
-        </mat-action-row>
-    </mat-expansion-panel>
-</mat-accordion>
-<ng-template #emptyView>
-  <p class="text-center mat-body-1">No todos added yet!</p>
-</ng-template>
+<div class="mt-5">
+  <mat-spinner *ngIf="isLoading" class="m-auto" diameter="30"></mat-spinner>
+  <div *ngIf="!isLoading">
+    <mat-accordion multi="true" *ngIf="todos.length>0; else emptyView;">
+      <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ item.title }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ item.dateCreated | date:'medium' }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>{{ item.content }}</p>
+          <mat-action-row>
+            <button (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button (click)="deleteTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+              <i class="fa fa-trash"></i>
+            </button>
+          </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-template #emptyView>
+      <p class="text-center mat-body-1">No todos added yet!</p>
+    </ng-template>
+  </div>
+</div>
