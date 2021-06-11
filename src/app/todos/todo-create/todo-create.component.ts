@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { take, map } from 'rxjs/operators';
 import { TodoService } from './../../../service/todo.service';
 import { AlertService } from './../../../service/alert.service';
@@ -24,7 +23,6 @@ export class TodoCreateComponent implements OnInit {
   constructor(private route: ActivatedRoute, 
               private todoService: TodoService, 
               private fb: FormBuilder,
-              private sanitizer: DomSanitizer,
               private alertService: AlertService,
               private router: Router) {
                
@@ -94,12 +92,11 @@ export class TodoCreateComponent implements OnInit {
   fileChangeEvent(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
     this.todoForm.controls.image.setValue(file);
-    console.log(URL.createObjectURL(file));
-    this.imagePreview = URL.createObjectURL(file);
-  }
-
-  getSantizeUrl(url : string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
+    const reader = new FileReader();
+    reader.onload = () => {      
+      this.imagePreview = (reader.result as string);
+    };
+    reader.readAsDataURL(file);    
   }
 
   get title() {
