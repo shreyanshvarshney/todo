@@ -25,6 +25,10 @@
                         This field cannot be left blank
                     </mat-error>
                 </mat-form-field>
+                <div class="w-75 m-auto text-left">
+                    <button (click)="filePicker.click()" mat-stroked-button color="primary">Upload Image</button>
+                    <input (change)="fileChangeEvent($event)" type="file" accept="image/*" #filePicker>
+                </div>
             </div>
         </mat-card-content>
         <mat-card-actions class="text-center">
@@ -32,4 +36,7 @@
           <button *ngIf="todoId" mat-raised-button (click)="saveTodo(todoForm)" type="button">Update</button>
         </mat-card-actions>
     </mat-card>
+</div>
+<div *ngIf="imagePreview !== '' && imagePreview" class="image-preview">
+    <img [src]="getSantizeUrl(imagePreview)" alt="">
 </div>
