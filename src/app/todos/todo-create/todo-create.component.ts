@@ -69,7 +69,7 @@ export class TodoCreateComponent implements OnInit {
         });
       }
     } else {
-      alert('Please enter all required deatails.');
+      this.alertService.openSnackBar("Please enter all required deatails.", 4000);
     }
   }
 
@@ -90,11 +90,17 @@ export class TodoCreateComponent implements OnInit {
   }
 
   fileChangeEvent(event: Event) {
+    console.log((event.target as HTMLInputElement).files);
+    
     const file = (event.target as HTMLInputElement).files[0];
+    console.log(file.type, Math.floor(file.size/1000));
+    if(Math.floor(file.size/1000) > 20) {
+      console.log(Error("Image size is big."));
+    }
     this.todoForm.controls.image.setValue(file);
     const reader = new FileReader();
     reader.onload = () => {      
-      this.imagePreview = (reader.result as string);
+      this.imagePreview = reader.result as string;
     };
     reader.readAsDataURL(file);    
   }
@@ -105,6 +111,10 @@ export class TodoCreateComponent implements OnInit {
 
   get content() {
     return this.todoForm.get('content');
+  }
+
+  get image() {
+    return this.todoForm.get('image');
   }
 
 }

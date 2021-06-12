@@ -18,6 +18,7 @@
                         </div>
                     </mat-error>
                 </mat-form-field>
+                <br><br>
                 <mat-form-field class="w-75">
                     <mat-label>Todo Content</mat-label>
                     <textarea formControlName="content" rows="6" cols="10" name="content" matInput></textarea>
@@ -25,10 +26,12 @@
                         This field cannot be left blank
                     </mat-error>
                 </mat-form-field>
+                <br><br>
                 <div class="w-75 m-auto text-left">
                     <button (click)="filePicker.click()" mat-stroked-button color="primary">Upload Image</button>
-                    <input (change)="fileChangeEvent($event)" type="file" accept="image/*" #filePicker>
+                    <input (change)="fileChangeEvent($event)" type="file" accept=".jpeg, .png, .jpg" #filePicker>
                 </div>
+                <br>
                 <div *ngIf="imagePreview !== '' && imagePreview" class="w-75 m-auto text-left image-preview">
                     <img [src]="imagePreview" [alt]="title.value">
                 </div>

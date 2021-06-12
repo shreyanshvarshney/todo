@@ -8,7 +8,7 @@ export class AlertService {
 
   constructor(private snackBar: MatSnackBar) { }
 
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'Dismiss', {duration: 2000});
+  openSnackBar(message: string, duration: number = 2000) {
+    this.snackBar.open(message, 'Dismiss', {duration: duration});
   }
 }
