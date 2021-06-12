@@ -47,7 +47,7 @@ export class TodoCreateComponent implements OnInit {
     this.todoForm = this.fb.group({
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       content: new FormControl('', Validators.required),
-      image: new FormControl(null, Validators.required)
+      image: new FormControl(null)
     });
   }
 
@@ -56,14 +56,26 @@ export class TodoCreateComponent implements OnInit {
       if(!this.todoId) {
         const obj = {
           ...form.value,
-          dateCreated: new Date()
-        }
-        this.todoService.addTodo(obj);
-        form.reset();
+          dateCreated: new Date(),
+          updated: false,
+          dateUpdated: new Date()
+        };
+        this.todoService.postTodo(obj)
+        .subscribe((res) => {
+          console.log(res.message);
+          this.alertService.openSnackBar("Added Successfully");
+          form.reset();
+          this.router.navigate(['/']);
+        });
       } else {
-        this.todoService.updateTodo(form.value, this.todoId)
-        .subscribe((result) => {
-          console.log(result.message);
+        const obj = {
+          ...form.value,
+          updated: true,
+          dateUpdated: new Date()
+        };
+        this.todoService.updateTodo(obj, this.todoId)
+        .subscribe((res) => {
+          console.log(res.message);
           this.alertService.openSnackBar("Updated Successfully.");
           this.router.navigate(['/']);
         });
@@ -76,11 +88,11 @@ export class TodoCreateComponent implements OnInit {
   loadTodoData() {
     this.isLoading = true;
     this.todoService.getTodo(this.todoId)
-    .subscribe((result) => {
-      // console.log(result);
-      this.todoData = result;
+    .subscribe((res) => {
+      // console.log(res);
+      this.todoData = res;
       this.isLoading = false;
-      this.prefillForm(result);
+      this.prefillForm(res);
     });
   }
 

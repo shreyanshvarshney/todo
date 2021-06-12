@@ -15,16 +15,10 @@ import { map } from 'rxjs/operators';
 })
 export class TodoService {
 
-  private todos: Todo[] = [];
-  // I have made this subject private becoz I dont want that other components to emit data(call next() method of this subject).
-  private todosUpdate = new Subject<Todo[]>();
-
   constructor(private http: HttpClient, private alertService: AlertService, private router: Router) { } 
 
-  // This is of no use now, after Implementing Subject rxjs operator.
   getTodos() {
-    // return [...this.todos];
-    this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi)
+    return this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi)
     .pipe(
       map((response) => {
         return response.todos.map((res: any) => {
@@ -32,51 +26,21 @@ export class TodoService {
             id: res._id,
             title: res.title,
             content: res.content,
-            dateCreated: res.dateCreated
+            dateCreated: res.dateCreated,
+            dateUpdated: res.dateUpdated,
+            updated: res.updated
           };
         });
       }),
-    )
-    .subscribe((res) => {
-      console.log(res);
-      this.todos = res;
-      this.todosUpdate.next([...this.todos]);
-    });
+    );
   }
 
-  getTodosUpdateListener() {
-    // Returning asObservable so that any component can only subscribe to this Observable.
-    return this.todosUpdate.asObservable();
+  postTodo(data: Todo) {
+    return this.http.post<{message: string, todoId: string}>(TodoApis.getTodosApi, data);
   }
 
-  addTodo(data: Todo) {
-    // Emitting an event using Subject or Behaviourial Subject.
-    // Emitting data array as a copy of original todo array becoz to avoid unnecessary data manupulation.
-    // this.todosUpdate.next([...this.todos]);
-
-    // Will add the id property in my backend.
-    this.http.post<{message: string, todoId: string}>(TodoApis.getTodosApi, data)
-    .subscribe((res) => {
-      console.log(res.message);
-      // Objects in TS are refrenece types so I can access object properties and update them.
-      data.id = res.todoId;
-      this.todos.push(data);
-      this.todosUpdate.next([...this.todos]);
-      this.alertService.openSnackBar("Added Successfully");
-      this.router.navigate(['/']);
-    });
-  }
-
-  deleteTodo(item: Todo) {
-    this.http.delete<{message: string}>(TodoApis.deleteTodoApi + item.id)
-    .subscribe((data) => {
-      console.log(data.message)
-      this.alertService.openSnackBar("Deleted Successfully");
-    });
-
-    const todoIndex = this.todos.indexOf(item,0);
-    this.todos.splice(todoIndex,1);
-    this.todosUpdate.next([...this.todos]);
+  deleteTodo(todoId: string) {
+    return this.http.delete<{message: string}>(TodoApis.deleteTodoApi + todoId);
   }
 
   getTodo(todoId: string) {
@@ -87,15 +51,15 @@ export class TodoService {
           id: res.todo._id,
           title: res.todo.title,
           content: res.todo.content,
-          dateCreated: res.todo.dateCreated
+          dateCreated: res.todo.dateCreated,
+          dateUpdated: res.dateUpdated,
+          updated: res.updated
         };
       }),
     );
   }
 
   updateTodo(data: Todo, todoId: string) {
-    // console.log(data);
-    data.id = todoId;
     return this.http.patch<{message: string}>(TodoApis.updateTodoApi + todoId, data);
   }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/service/alert.service';
 
 import { TodoService } from 'src/service/todo.service';
 import { Todo } from './../../../data-models/todo.model';
@@ -14,23 +15,27 @@ export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   isLoading = false;
 
-  constructor(private todoService: TodoService, private router: Router) { }
+  constructor(private todoService: TodoService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit(): void {
+    this.getTodos();
+  }
+
+  getTodos() {
     this.isLoading = true;
-    this.todoService.getTodos();
-    // Everytime the next() method of Subject is called (any changes occures) in todo-service todos array,
-    // we will be notified here and angular change detection mechanism will updated the ui accordingly.
-    this.todoService.getTodosUpdateListener()
-    .subscribe((res) => {
+    this.todoService.getTodos().subscribe((res) => {      
       this.isLoading = false;
       this.todos = res;
     });
-    
   }
 
-  deleteTodo(item: Todo) {
-    this.todoService.deleteTodo(item);
+  deleteTodo(id: string) {
+    this.todoService.deleteTodo(id)
+    .subscribe((res) => {
+      this.getTodos();
+      console.log(res.message);
+      this.alertService.openSnackBar("Deleted Successfully");
+    });
   }
 
   updateTodo(item: Todo) {
