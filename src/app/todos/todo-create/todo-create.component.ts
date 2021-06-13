@@ -60,7 +60,12 @@ export class TodoCreateComponent implements OnInit {
           updated: false,
           dateUpdated: new Date()
         };
-        this.todoService.postTodo(obj)
+        // FormData is a data format which allows me combine text values and Blob (file values).
+        const todoData = new FormData();
+        todoData.append('title', form.value.title);
+        todoData.append('content', form.value.content);
+        todoData.append('image', this.todoForm.controls.image.value, form.value.title);
+        this.todoService.postTodo(todoData)
         .subscribe((res) => {
           console.log(res.message);
           this.alertService.openSnackBar("Added Successfully");
@@ -105,10 +110,10 @@ export class TodoCreateComponent implements OnInit {
     console.log((event.target as HTMLInputElement).files);
     
     const file = (event.target as HTMLInputElement).files[0];
-    console.log(file.type, Math.floor(file.size/1000));
-    if(Math.floor(file.size/1000) > 20) {
-      console.log(Error("Image size is big."));
-    }
+    // console.log(file.type, Math.floor(file.size/1000));
+    // if(Math.floor(file.size/1000) > 20) {
+    //   console.log(Error("Image size is big."));
+    // }
     this.todoForm.controls.image.setValue(file);
     const reader = new FileReader();
     reader.onload = () => {      

@@ -35,7 +35,7 @@ export class TodoService {
     );
   }
 
-  postTodo(data: Todo) {
+  postTodo(data) {
     return this.http.post<{message: string, todoId: string}>(TodoApis.getTodosApi, data);
   }
 
