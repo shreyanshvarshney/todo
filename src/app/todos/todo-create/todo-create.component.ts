@@ -59,18 +59,11 @@ export class TodoCreateComponent implements OnInit {
           dateCreated: new Date(),
           updated: false,
           dateUpdated: new Date()
-        };
-        // FormData is a data format which allows me combine text values and Blob (file values).
-        const todoData = new FormData();
-        todoData.append('title', form.value.title);
-        todoData.append('content', form.value.content);
-        todoData.append('image', this.todoForm.controls.image.value, form.value.title);
-        this.todoService.postTodo(todoData)
+        };        
+        this.todoService.postTodo(obj)
         .subscribe((res) => {
           console.log(res.message);
-          this.alertService.openSnackBar("Added Successfully");
-          form.reset();
-          this.router.navigate(['/']);
+          this.uploadImage(res.todoId);
         });
       } else {
         const obj = {
@@ -88,6 +81,20 @@ export class TodoCreateComponent implements OnInit {
     } else {
       this.alertService.openSnackBar("Please enter all required deatails.", 4000);
     }
+  }
+
+  uploadImage(todoId: string) {
+    // FormData is a data format which allows me to combine text values and Blob (file values).
+    const todoData = new FormData();
+    todoData.append('id', todoId);
+    todoData.append('image', this.todoForm.controls.image.value, this.todoForm.controls.title.value);
+    this.todoService.uploadTodoImage(todoData)
+    .subscribe((res) => {
+      console.log(res.message);
+      this.alertService.openSnackBar("Added Successfully");
+      this.todoForm.reset();
+      this.router.navigate(['/']);
+    });
   }
 
   loadTodoData() {

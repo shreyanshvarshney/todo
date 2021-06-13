@@ -23,7 +23,8 @@ export class TodoListComponent implements OnInit {
 
   getTodos() {
     this.isLoading = true;
-    this.todoService.getTodos().subscribe((res) => {      
+    this.todoService.getTodos().subscribe((res) => {
+      console.log(res);  
       this.isLoading = false;
       this.todos = res;
     });
@@ -40,6 +41,15 @@ export class TodoListComponent implements OnInit {
 
   updateTodo(item: Todo) {
     this.router.navigate(['/update',item.id]);
+  }
+
+  deleteAllTodos() {
+    this.todoService.deleteAllTodos()
+    .subscribe((res) => {
+      this.getTodos();
+      console.log(res.message);
+      this.alertService.openSnackBar("Deleted all your todos Successfully");
+    });
   }
 
 }

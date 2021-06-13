@@ -5,4 +5,5 @@ export interface Todo {
     dateCreated: Date;
     dateUpdated: Date;
     updated: boolean;
+    imagePath: string;
 }

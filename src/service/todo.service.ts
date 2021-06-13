@@ -28,7 +28,8 @@ export class TodoService {
             content: res.content,
             dateCreated: res.dateCreated,
             dateUpdated: res.dateUpdated,
-            updated: res.updated
+            updated: res.updated,
+            imagePath: res.imagePath
           };
         });
       }),
@@ -43,6 +44,10 @@ export class TodoService {
     return this.http.delete<{message: string}>(TodoApis.deleteTodoApi + todoId);
   }
 
+  deleteAllTodos() {
+    return this.http.delete<{message: string}>(TodoApis.deleteTodosApi);
+  }
+
   getTodo(todoId: string) {
     return this.http.get<{todo: Todo}>(TodoApis.getTodoApi + todoId)
     .pipe(
@@ -53,7 +58,8 @@ export class TodoService {
           content: res.todo.content,
           dateCreated: res.todo.dateCreated,
           dateUpdated: res.dateUpdated,
-          updated: res.updated
+          updated: res.updated,
+          imagePath: res.imagePath
         };
       }),
     );
@@ -61,6 +67,10 @@ export class TodoService {
 
   updateTodo(data: Todo, todoId: string) {
     return this.http.patch<{message: string}>(TodoApis.updateTodoApi + todoId, data);
+  }
+
+  uploadTodoImage(data: FormData) {
+    return this.http.post<{message: string}>(TodoApis.imageUploadApi, data);
   }
 
 }

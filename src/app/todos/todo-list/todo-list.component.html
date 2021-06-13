@@ -1,28 +1,45 @@
 <div class="mt-5">
   <mat-spinner *ngIf="isLoading" class="m-auto" diameter="30"></mat-spinner>
   <div *ngIf="!isLoading">
-    <mat-accordion multi="true" *ngIf="todos.length>0; else emptyView;">
-      <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{ item.title }}
-            </mat-panel-title>
-            <mat-panel-description>
-              {{ item.dateCreated | date:'medium' }}
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <p>{{ item.content }}</p>
-          <mat-action-row>
-            <p *ngIf="item.updated" class="edited-text text-muted">Edited <i class="fa fa-edit"></i>&nbsp;&nbsp;{{ item.dateUpdated | date:'medium' }}</p>
-            <button (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
-              <i class="fa fa-trash"></i>
-            </button>
-          </mat-action-row>
-      </mat-expansion-panel>
-    </mat-accordion>
+    <div *ngIf="todos.length>0; else emptyView;">
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+        <i class="fa fa-list"></i>
+      </button>
+      <mat-menu #menu="matMenu" yPosition="above">
+        <button (click)="deleteAllTodos()" mat-menu-item>
+          <i class="fa fa-trash btn btn-danger"></i>
+          <span class="ml-2"> Delete All</span>
+        </button>
+      </mat-menu>
+  
+      <mat-accordion multi="true">
+        <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ item.title }}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ item.dateCreated | date:'medium' }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>{{ item.content }}</p>
+            <div>
+              <img [src]=item?.imagePath alt="Image" width="100px" height="100px">
+            </div>
+            <mat-action-row>
+              <p *ngIf="item.updated" class="edited-text text-muted">Edited <i class="fa fa-edit"></i>&nbsp;&nbsp;{{ item.dateUpdated | date:'medium' }}</p>
+              <button (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+                <i class="fa fa-trash"></i>
+              </button>
+            </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+    </div>
     <ng-template #emptyView>
       <p class="text-center mat-body-1">No todos added yet!</p>
     </ng-template>
