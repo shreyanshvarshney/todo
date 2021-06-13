@@ -57,9 +57,9 @@ export class TodoService {
           title: res.todo.title,
           content: res.todo.content,
           dateCreated: res.todo.dateCreated,
-          dateUpdated: res.dateUpdated,
-          updated: res.updated,
-          imagePath: res.imagePath
+          dateUpdated: res.todo.dateUpdated,
+          updated: res.todo.updated,
+          imagePath: res.todo.imagePath
         };
       }),
     );

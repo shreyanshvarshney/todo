@@ -56,9 +56,7 @@ export class TodoCreateComponent implements OnInit {
       if(!this.todoId) {
         const obj = {
           ...form.value,
-          dateCreated: new Date(),
-          updated: false,
-          dateUpdated: new Date()
+          dateCreated: new Date()
         };        
         this.todoService.postTodo(obj)
         .subscribe((res) => {
@@ -74,7 +72,11 @@ export class TodoCreateComponent implements OnInit {
         });
       } else {
         const obj = {
-          ...form.value,
+          ...this.todoData,
+          // This will overwrite the exsisting values, functionality of spread operator.
+          // Can also write ...form.value
+          title: form.controls.title.value,
+          content: form.controls.content.value,
           updated: true,
           dateUpdated: new Date()
         };
