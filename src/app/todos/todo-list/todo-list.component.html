@@ -24,7 +24,7 @@
               </mat-panel-description>
             </mat-expansion-panel-header>
             <p>{{ item.content }}</p>
-            <div>
+            <div *ngIf="item.imagePath">
               <img [src]=item?.imagePath alt="Image" width="100px" height="100px">
             </div>
             <mat-action-row>

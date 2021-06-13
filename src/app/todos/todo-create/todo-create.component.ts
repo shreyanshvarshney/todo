@@ -63,7 +63,14 @@ export class TodoCreateComponent implements OnInit {
         this.todoService.postTodo(obj)
         .subscribe((res) => {
           console.log(res.message);
-          this.uploadImage(res.todoId);
+          if (this.todoForm.controls.image.value) {
+            this.uploadImage(res.todoId);
+          }
+          else {
+            this.alertService.openSnackBar("Added Successfully");
+            this.todoForm.reset();
+            this.router.navigate(['/']);
+          }
         });
       } else {
         const obj = {
