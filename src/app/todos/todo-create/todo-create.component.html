@@ -30,8 +30,12 @@
                 <div class="w-75 m-auto text-left">
                     <button (click)="filePicker.click()" mat-stroked-button color="primary">Upload Image</button>
                     <input (change)="fileChangeEvent($event)" type="file" accept=".jpeg, .png, .jpg" #filePicker>
+                    <p *ngIf="todoData?.imagePath && !imagePreview" class="mt-2 mb-0 text-muted text-break">{{ todoData.imagePath }}</p>
                 </div>
                 <br>
+                <div *ngIf="todoData?.imagePath && !imagePreview" class="w-75 m-auto text-left image-preview">
+                    <img [src]="todoData.imagePath" [alt]="title.value">
+                </div>
                 <div *ngIf="imagePreview !== '' && imagePreview" class="w-75 m-auto text-left image-preview">
                     <img [src]="imagePreview" [alt]="title.value">
                 </div>

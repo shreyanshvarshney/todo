@@ -5,6 +5,7 @@ import { take, map } from 'rxjs/operators';
 import { TodoService } from './../../../service/todo.service';
 import { AlertService } from './../../../service/alert.service';
 import { Todo } from './../../../data-models/todo.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-todo-create',
@@ -15,7 +16,7 @@ export class TodoCreateComponent implements OnInit {
 
   todoForm: FormGroup;
   todoId: string;
-  private todoData: Todo;
+  todoData: Todo;
   isLoading = false;
 
   imagePreview: string;
@@ -54,6 +55,7 @@ export class TodoCreateComponent implements OnInit {
   saveTodo(form: FormGroup) {
     if (form.valid) {
       if(!this.todoId) {
+        console.log(form.value);
         const obj = {
           ...form.value,
           dateCreated: new Date()
@@ -71,20 +73,18 @@ export class TodoCreateComponent implements OnInit {
           }
         });
       } else {
-        const obj = {
-          ...this.todoData,
-          // This will overwrite the exsisting values, functionality of spread operator.
-          // Can also write ...form.value
-          title: form.controls.title.value,
-          content: form.controls.content.value,
-          updated: true,
-          dateUpdated: new Date()
-        };
-        this.todoService.updateTodo(obj, this.todoId)
+        let finalData = this.prepateUpdateAttributes(form);
+        // console.log(finalData);
+        this.todoService.updateTodo(finalData, this.todoId)
         .subscribe((res) => {
           console.log(res.message);
-          this.alertService.openSnackBar("Updated Successfully.");
-          this.router.navigate(['/']);
+          if (form.controls.image.value !== null) {
+            this.uploadImage(this.todoData.id);
+          }
+          else {
+            this.alertService.openSnackBar("Updated Successfully.");
+            this.router.navigate(['/']);
+          }
         });
       }
     } else {
@@ -100,10 +100,28 @@ export class TodoCreateComponent implements OnInit {
     this.todoService.uploadTodoImage(todoData)
     .subscribe((res) => {
       console.log(res.message);
-      this.alertService.openSnackBar("Added Successfully");
-      this.todoForm.reset();
+      if (this.todoData) {
+        this.alertService.openSnackBar("Updated Successfully.");
+      }
+      else {
+        this.alertService.openSnackBar("Added Successfully");
+        this.todoForm.reset();
+      }
       this.router.navigate(['/']);
     });
+  }
+
+  prepateUpdateAttributes(form: FormGroup) {
+    const obj = {
+      ...this.todoData,
+      // This will overwrite the exsisting values, functionality of spread operator.
+      // Can also write ...form.value
+      title: form.controls.title.value,
+      content: form.controls.content.value,
+      updated: true,
+      dateUpdated: new Date()
+    };
+    return obj;
   }
 
   loadTodoData() {
