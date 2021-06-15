@@ -6,6 +6,7 @@ import { TodoService } from './../../../service/todo.service';
 import { AlertService } from './../../../service/alert.service';
 import { Todo } from './../../../data-models/todo.model';
 import { Observable } from 'rxjs';
+import { modules } from '../../utils/quillEditorConfig';
 
 @Component({
   selector: 'app-todo-create',
@@ -20,13 +21,14 @@ export class TodoCreateComponent implements OnInit {
   isLoading = false;
 
   imagePreview: string;
+  // Quill Editor config
+  modules = modules;
 
   constructor(private route: ActivatedRoute, 
               private todoService: TodoService, 
               private fb: FormBuilder,
               private alertService: AlertService,
               private router: Router) {
-               
                 this.route.paramMap.pipe(
                   take(1)
                 ).subscribe((params: ParamMap) => {
@@ -88,6 +90,10 @@ export class TodoCreateComponent implements OnInit {
         });
       }
     } else {
+      Object.keys(this.todoForm.controls).forEach(field => {
+        const control = this.todoForm.get(field);
+        control.markAsTouched({onlySelf: true});
+      });
       this.alertService.openSnackBar("Please enter all required deatails.", 4000);
     }
   }
@@ -112,7 +118,7 @@ export class TodoCreateComponent implements OnInit {
   }
 
   prepateUpdateAttributes(form: FormGroup) {
-    const obj = {
+    return {
       ...this.todoData,
       // This will overwrite the exsisting values, functionality of spread operator.
       // Can also write ...form.value
@@ -121,7 +127,6 @@ export class TodoCreateComponent implements OnInit {
       updated: true,
       dateUpdated: new Date()
     };
-    return obj;
   }
 
   loadTodoData() {

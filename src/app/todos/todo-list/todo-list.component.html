@@ -23,10 +23,12 @@
                 {{ item.dateCreated | date:'medium' }}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <p>{{ item.content }}</p>
-            <div *ngIf="item.imagePath">
-              <img [src]=item?.imagePath alt="Image" width="100px" height="100px">
-            </div>
+            <mat-card>
+              <p [innerHTML]="item.content | bypassSanitizer"></p>
+              <div *ngIf="item.imagePath">
+                <img [src]=item?.imagePath alt="Image" width="100px" height="100px">
+              </div>
+            </mat-card>
             <mat-action-row>
               <p *ngIf="item.updated" class="edited-text text-muted">Edited <i class="fa fa-edit"></i>&nbsp;&nbsp;{{ item.dateUpdated | date:'medium' }}</p>
               <button (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">

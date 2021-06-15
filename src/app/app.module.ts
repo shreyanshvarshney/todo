@@ -22,12 +22,16 @@ import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/materia
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatMenuModule} from '@angular/material/menu';
 
+import {QuillModule} from 'ngx-quill';
+import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
+
 @NgModule({
   declarations: [
     AppComponent,
     TodoCreateComponent,
     HeaderComponent,
-    TodoListComponent
+    TodoListComponent,
+    BypassSanitizerPipe
   ],
   imports: [
     BrowserModule,
@@ -44,7 +48,8 @@ import {MatMenuModule} from '@angular/material/menu';
     MatExpansionModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatMenuModule
+    MatMenuModule,
+    QuillModule.forRoot(),
   ],
   providers: [
     TodoService,

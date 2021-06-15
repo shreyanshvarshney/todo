@@ -19,13 +19,19 @@
                     </mat-error>
                 </mat-form-field>
                 <br><br>
-                <mat-form-field class="w-75">
+                <div class="w-75 m-auto">
+                    <quill-editor formControlName="content" placeholder="Enter your todo content here..." class="quill-editor" [modules]="modules"></quill-editor>
+                </div>
+                <mat-error *ngIf="content.invalid && content.touched">
+                    This field cannot be left blank
+                </mat-error>
+                <!-- <mat-form-field class="w-75">
                     <mat-label>Todo Content</mat-label>
                     <textarea formControlName="content" rows="6" cols="10" name="content" matInput></textarea>
                     <mat-error *ngIf="content.invalid">
                         This field cannot be left blank
                     </mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
                 <br><br>
                 <div class="w-75 m-auto text-left">
                     <button (click)="filePicker.click()" mat-stroked-button color="primary">Upload Image</button>
