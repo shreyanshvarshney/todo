@@ -15,3 +15,7 @@ input[type="file"] {
 ::ng-deep .ql-editor {
     min-height: 250px;
 }
+
+mat-error {
+    font-size: 10.5px;
+}

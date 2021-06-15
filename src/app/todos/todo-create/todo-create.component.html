@@ -21,10 +21,10 @@
                 <br><br>
                 <div class="w-75 m-auto">
                     <quill-editor formControlName="content" placeholder="Enter your todo content here..." class="quill-editor" [modules]="modules"></quill-editor>
+                    <mat-error *ngIf="content.invalid && content.touched" class="text-left mt-1">
+                        This field cannot be left blank
+                    </mat-error>
                 </div>
-                <mat-error *ngIf="content.invalid && content.touched">
-                    This field cannot be left blank
-                </mat-error>
                 <!-- <mat-form-field class="w-75">
                     <mat-label>Todo Content</mat-label>
                     <textarea formControlName="content" rows="6" cols="10" name="content" matInput></textarea>
