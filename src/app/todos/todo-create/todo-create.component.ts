@@ -40,13 +40,13 @@ export class TodoCreateComponent implements OnInit {
               }
 
   ngOnInit(): void {
-    this.initailizeForm();
+    this.initializeForm();
     if (this.todoId !== null && this.todoId) {
       this.loadTodoData();
     }
   }
 
-  initailizeForm() {
+  initializeForm() {
     this.todoForm = this.fb.group({
       title: new FormControl('', [Validators.required, Validators.minLength(3)]),
       content: new FormControl('', Validators.required),

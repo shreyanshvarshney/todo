@@ -1,0 +1,28 @@
+<div class="mt-5">
+    <mat-spinner *ngIf="isLoading" class="m-auto" diameter="30"></mat-spinner>
+    <mat-card *ngIf="!isLoading">
+        <form [formGroup]="signupForm" class="signup-form" (ngSubmit)="onSignup(signupForm)">
+            <mat-form-field class="signup-full-width">
+                <mat-label>Name</mat-label>
+                <input formControlName="name" matInput>
+                <mat-error *ngIf="name.invalid">This field cannot be left blank</mat-error>
+            </mat-form-field>
+            <br><br>
+            <mat-form-field class="signup-full-width">
+              <mat-label>Email</mat-label>
+              <input formControlName="email" matInput>
+              <mat-error *ngIf="email.invalid">
+                  <div *ngIf="email.errors?.required">This field cannot be left blank</div>
+                  <div *ngIf="email.errors?.email">Please enter a valid email.</div>
+              </mat-error>
+            </mat-form-field>
+            <br><br>
+            <mat-form-field class="signup-full-width">
+              <mat-label>Password</mat-label>
+              <input formControlName="password" matInput>
+              <mat-error *ngIf="password.invalid">This field cannot be left blank</mat-error>
+            </mat-form-field>
+            <button class="mt-5" type="submit" mat-raised-button>Signup</button>
+        </form>
+    </mat-card>
+</div>

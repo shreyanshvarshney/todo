@@ -9,6 +9,8 @@ import { AppComponent } from './app.component';
 import { TodoCreateComponent } from './todos/todo-create/todo-create.component';
 import { TodoListComponent } from './todos/todo-list/todo-list.component';
 import { HeaderComponent } from './header/header.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
 
@@ -31,6 +33,8 @@ import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
     AppComponent,
     TodoCreateComponent,
     HeaderComponent,
+    LoginComponent,
+    SignupComponent,
     TodoListComponent,
     BypassSanitizerPipe
   ],

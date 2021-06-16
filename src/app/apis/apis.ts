@@ -9,4 +9,6 @@ export const TodoApis = {
     updateTodoApi: environment.baseUrl + 'api/todo/',
     deleteTodosApi: environment.baseUrl + 'api/todos',
     imageUploadApi: environment.baseUrl + 'api/upload',
+
+    signupApi: environment.baseUrl + 'api/user/signup'
 };

@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { TodoListComponent } from './todos/todo-list/todo-list.component';
 import { TodoCreateComponent } from './todos/todo-create/todo-create.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 const routes: Routes = [
   {
@@ -11,6 +13,14 @@ const routes: Routes = [
     data: {
       title: 'Todo List Page'
     }
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'signup',
+    component: SignupComponent
   },
   {
     path: 'create',
