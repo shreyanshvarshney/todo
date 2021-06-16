@@ -17,21 +17,25 @@ export class TodoService {
 
   constructor(private http: HttpClient, private alertService: AlertService, private router: Router) { } 
 
-  getTodos() {
-    return this.http.get<{message: string, todos: Todo[]}>(TodoApis.getTodosApi)
+  getTodos(pageSize: number, pageIndex: number) {
+    const queryParams = `?pageSize=${pageSize}&pageIndex=${pageIndex + 1}`;
+    return this.http.get<{message: string, todos: Todo[], count: number}>(TodoApis.getTodosApi + queryParams)
     .pipe(
       map((response) => {
-        return response.todos.map((res: any) => {
-          return {
-            id: res._id,
-            title: res.title,
-            content: res.content,
-            dateCreated: res.dateCreated,
-            dateUpdated: res.dateUpdated,
-            updated: res.updated,
-            imagePath: res.imagePath
-          };
-        });
+        return {
+          todos: response.todos.map((res: any) => {
+            return {
+              id: res._id,
+              title: res.title,
+              content: res.content,
+              dateCreated: res.dateCreated,
+              dateUpdated: res.dateUpdated,
+              updated: res.updated,
+              imagePath: res.imagePath
+            };
+          }),
+          count: response.count
+        }
       }),
     );
   }

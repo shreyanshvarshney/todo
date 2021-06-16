@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/service/alert.service';
 
@@ -15,6 +16,11 @@ export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   isLoading = false;
 
+  length = 0; // totalTodos
+  pageSize = 4; // todosPerPage
+  pageIndex = 0; // Current Page (starting with 0)
+  pageSizeOptions = [1, 2, 5, 10];
+
   constructor(private todoService: TodoService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit(): void {
@@ -23,11 +29,18 @@ export class TodoListComponent implements OnInit {
 
   getTodos() {
     this.isLoading = true;
-    this.todoService.getTodos().subscribe((res) => {
-      console.log(res);  
+    this.todoService.getTodos(this.pageSize, this.pageIndex).subscribe((res) => {
+      // console.log(res);
       this.isLoading = false;
-      this.todos = res;
+      this.todos = res.todos;
+      this.length = res.count;
     });
+  }
+
+  onChangedPage(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getTodos();
   }
 
   deleteTodo(id: string) {
