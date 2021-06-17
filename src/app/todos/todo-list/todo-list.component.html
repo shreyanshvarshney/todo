@@ -5,7 +5,7 @@
       <i class="fa fa-list"></i>
     </button>
     <mat-menu #menu="matMenu" yPosition="above">
-      <button (click)="deleteAllTodos()" mat-menu-item>
+      <button [disabled]="!authState" (click)="deleteAllTodos()" mat-menu-item>
         <i class="fa fa-trash btn btn-danger"></i>
         <span class="ml-2"> Delete All</span>
       </button>
