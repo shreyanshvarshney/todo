@@ -34,7 +34,8 @@ const routes: Routes = [
   },
   {
     path: 'update/:id',
-    component: TodoCreateComponent
+    component: TodoCreateComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
