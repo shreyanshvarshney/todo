@@ -6,6 +6,8 @@ import { TodoCreateComponent } from './todos/todo-create/todo-create.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 
+import { AuthGuard } from './../guards/auth.guard';
+
 const routes: Routes = [
   {
     path: '',
@@ -27,7 +29,8 @@ const routes: Routes = [
     component: TodoCreateComponent,
     data: {
       title: 'Todo Create Page'
-    }
+    },
+    canActivate: [AuthGuard]
   },
   {
     path: 'update/:id',

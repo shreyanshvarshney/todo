@@ -39,13 +39,13 @@ export class AuthService {
     );
   }
 
-  login(data) {
+  login(data, returnUrl: string) {
     return this.http.post<{message: string, token: string, user: User}>(TodoApis.loginApi, data)
     .subscribe((res) => {
       this.token = res.token;
       this.authState.next(true);
       console.log(res);
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl(returnUrl);
       this.alertService.openSnackBar("Login Successfull.");
     },
     (error: HttpErrorResponse) => {
