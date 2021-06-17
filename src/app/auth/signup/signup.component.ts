@@ -1,8 +1,8 @@
-import { TodoApis } from './../../apis/apis';
-import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { AuthService } from './../../../service/auth.service';
 import { AlertService } from 'src/service/alert.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   isLoading= false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient ,private alertService: AlertService) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private alertService: AlertService, private router: Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -32,7 +32,16 @@ export class SignupComponent implements OnInit {
   onSignup(form: FormGroup) {
     if (form.valid) {
       console.log(form.value);
-      this.http.post<{message: string}>(TodoApis.signupApi, form.value).subscribe(data => console.log(data.message));
+      this.authService.createUser(form.value)
+      .subscribe((res) => {
+        console.log(res.message);
+        console.log(res.data);
+        this.router.navigate(['/login']);
+        this.alertService.openSnackBar("Successfull Signup, Please login with your credentials.", 4000);
+      },
+      (error) => {
+        console.log(error);
+      });
     } else {
       Object.keys(form.controls).forEach((field) => {
         const control = form.get(field);

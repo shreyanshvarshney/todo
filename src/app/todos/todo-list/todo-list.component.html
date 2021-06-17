@@ -12,13 +12,14 @@
     </mat-menu>
 
     <mat-accordion multi="true">
-      <mat-expansion-panel hideToggle="false" *ngFor="let item of todos">
+      <mat-expansion-panel hideToggle="false" *ngFor="let item of todos" (afterExpand)="onExpand()">
           <mat-expansion-panel-header>
             <mat-panel-title>
               {{ item.title }}
             </mat-panel-title>
             <mat-panel-description>
               {{ item.dateCreated | date:'medium' }}
+              <span class="ml-2" *ngIf="item.updated"><i class="fa fa-edit"></i></span>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-card>
@@ -29,10 +30,10 @@
           </mat-card>
           <mat-action-row>
             <p *ngIf="item.updated" class="edited-text text-muted">Edited <i class="fa fa-edit"></i>&nbsp;&nbsp;{{ item.dateUpdated | date:'medium' }}</p>
-            <button (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <button [disabled]="!authState" (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
               <i class="fa fa-edit"></i>
             </button>
-            <button (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <button [disabled]="!authState" (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
               <i class="fa fa-trash"></i>
             </button>
           </mat-action-row>

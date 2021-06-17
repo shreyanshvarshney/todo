@@ -2,6 +2,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { Component, OnInit } from '@angular/core';
 
 import { AlertService } from 'src/service/alert.service';
+import { AuthService } from 'src/service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isLoading = false;
 
-  constructor(private fb: FormBuilder, private alertService: AlertService) { }
+  constructor(private fb: FormBuilder, private authService: AuthService, private alertService: AlertService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   onLogin(form: FormGroup) {
     if (form.valid) {
       console.log(form.value);
+      this.authService.login(form.value);
     } else {
       Object.keys(form.controls).forEach((field) => {
         const control = form.get(field);

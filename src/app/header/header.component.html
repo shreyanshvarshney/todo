@@ -1,7 +1,8 @@
 <p>
     <mat-toolbar color="primary">
       <span><a class="navbar-brand" routerLink="/">My Todo's</a></span>
-      <span><a mat-button routerLink="/create" routerLinkActive="active">Create Todo</a></span>
-      <span><a mat-button routerLink="/login" routerLinkActive="active"><i class="fa fa-user"></i> Login</a></span>
+      <span *ngIf="authState"><a mat-button routerLink="/create" routerLinkActive="active">Create Todo</a></span>
+      <span *ngIf="!authState"><a mat-button routerLink="/login" routerLinkActive="active"><i class="fa fa-user"></i> Login</a></span>
+      <span *ngIf="authState"><button mat-button (click)="onLogout()">Logout</button></span>
     </mat-toolbar>
 </p>
