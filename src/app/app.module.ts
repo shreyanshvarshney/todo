@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from  '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +13,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
+import { AuthService } from './../service/auth.service';
 
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
@@ -27,6 +28,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 
 import {QuillModule} from 'ngx-quill';
 import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
+import { AuthInterceptor } from './utils/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
   ],
   providers: [
     TodoService,
+    AuthService,
     AlertService,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -67,6 +70,12 @@ import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
     {
       provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: { color: 'primary' },
+    },
+    // Configuration of my Auth Interceptor
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
