@@ -46,11 +46,14 @@ export class AuthService {
       this.token = res.token;
       if (res.token) {
         // For displaying JW Token expiration on client side.
-        this.tokenTimer = setTimeout(() => {
-          this.logout();
-        }, res.expiresIn * 1000);
+        this.setAuthTimer(res.expiresIn);
         this.authState.next(true);
         console.log(res);
+        const now = new Date();
+        // Now I will create a new Date object using my calculated miliseconds.
+        const expirationDate = new Date(now.getTime() + (res.expiresIn * 1000));
+        console.log(expirationDate);
+        this.saveAuthData(res.token, expirationDate);
         this.router.navigateByUrl(returnUrl);
         this.alertService.openSnackBar("Login Successfull.");
       }
@@ -73,8 +76,55 @@ export class AuthService {
     this.token = null;
     this.authState.next(false);
     clearTimeout(this.tokenTimer);
+    this.clearAuthData();
     this.router.navigateByUrl('/');
     this.alertService.openSnackBar("Logged Out");
+  }
+
+  autoAuthUser() {
+    const authData = this.getAuthData();
+    // A check if we dont have anything in my localStorage, simply return;
+    if (!authData) return;
+    // First I will check if the token is still valid from expirationDate
+    const now = new Date();
+    const expiresIn = authData.expirationDate.getTime() - now.getTime();
+    console.log(expiresIn);
+    // If expiresIn is negative or 0 that means my token is expired.
+    if (expiresIn > 0) {
+      this.setAuthTimer(expiresIn / 1000);
+      this.authState.next(true);
+      this.token = authData.token;
+    }
+  }
+
+  private setAuthTimer(duration: number) {
+    console.log("Setting Timer: ", duration);
+    this.tokenTimer = setTimeout(() => {
+      this.logout();
+    }, duration * 1000);
+  }
+
+  private saveAuthData(token: string, expirationDate: Date) {
+    localStorage.setItem("token", token);
+    // ISOString is Serialize and Standard version of the Date which then I can use to re-create it when I read/get the data later.
+    localStorage.setItem("expiration", expirationDate.toISOString());
+  }
+
+  private clearAuthData() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("expiration");
+  }
+
+  private getAuthData() {
+    const token = localStorage.getItem("token");
+    const expirationDate = localStorage.getItem("expiration");
+    // A check to confirm that we have token and expirationDate in localStorage.
+    if(!token || !expirationDate) return;
+    return {
+      token: token,
+      // Here I can pass that serialized expression date string and it will construct Date object based on that.
+      expirationDate: new Date(expirationDate)
+    };
   }
 
 }
