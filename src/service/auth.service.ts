@@ -19,6 +19,7 @@ export class AuthService {
   // Suppose If i logout or clear my token, so I have to inform my subscribers dependent on authState of a user.
   // And will push auth info to the comps. which are interested.
   private authState = new BehaviorSubject<boolean>(false);
+  private tokenTimer: any;
 
   constructor(private http: HttpClient, private router: Router, private alertService: AlertService) { }
 
@@ -40,13 +41,19 @@ export class AuthService {
   }
 
   login(data, returnUrl: string) {
-    return this.http.post<{message: string, token: string, user: User}>(TodoApis.loginApi, data)
+    return this.http.post<{message: string, token: string, user: User, expiresIn: number}>(TodoApis.loginApi, data)
     .subscribe((res) => {
       this.token = res.token;
-      this.authState.next(true);
-      console.log(res);
-      this.router.navigateByUrl(returnUrl);
-      this.alertService.openSnackBar("Login Successfull.");
+      if (res.token) {
+        // For displaying JW Token expiration on client side.
+        this.tokenTimer = setTimeout(() => {
+          this.logout();
+        }, res.expiresIn);
+        this.authState.next(true);
+        console.log(res);
+        this.router.navigateByUrl(returnUrl);
+        this.alertService.openSnackBar("Login Successfull.");
+      }
     },
     (error: HttpErrorResponse) => {
       console.log(error);
@@ -65,6 +72,7 @@ export class AuthService {
   logout() {
     this.token = null;
     this.authState.next(false);
+    clearTimeout(this.tokenTimer);
     this.router.navigateByUrl('/');
     this.alertService.openSnackBar("Logged Out");
   }
