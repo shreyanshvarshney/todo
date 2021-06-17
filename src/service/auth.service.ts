@@ -48,7 +48,7 @@ export class AuthService {
         // For displaying JW Token expiration on client side.
         this.tokenTimer = setTimeout(() => {
           this.logout();
-        }, res.expiresIn);
+        }, res.expiresIn * 1000);
         this.authState.next(true);
         console.log(res);
         this.router.navigateByUrl(returnUrl);
