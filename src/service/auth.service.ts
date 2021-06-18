@@ -63,7 +63,11 @@ export class AuthService {
     },
     (error: HttpErrorResponse) => {
       console.log(error);
-      this.alertService.openSnackBar("Please enter correct login details.")
+      this.authState.next({
+        loggedIn: false,
+        userDetails: null
+      });
+      this.alertService.openSnackBar(error.error.message);
     });
   }
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { take, map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TodoService } from './../../../service/todo.service';
 import { AlertService } from './../../../service/alert.service';
 import { Todo } from './../../../data-models/todo.model';
@@ -71,8 +72,12 @@ export class TodoCreateComponent implements OnInit {
           else {
             this.alertService.openSnackBar("Added Successfully");
             this.todoForm.reset();
-            this.router.navigate(['/']);
+            this.router.navigate(['/todos']);
           }
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          this.alertService.openErrorDialog(error.error.message);
         });
       } else {
         let finalData = this.prepateUpdateAttributes(form);
@@ -85,8 +90,12 @@ export class TodoCreateComponent implements OnInit {
           }
           else {
             this.alertService.openSnackBar("Updated Successfully.");
-            this.router.navigate(['/']);
+            this.router.navigate(['/todos']);
           }
+        },
+        (error: HttpErrorResponse) => {
+          console.log(error);
+          this.alertService.openErrorDialog(error.error.message);
         });
       }
     } else {

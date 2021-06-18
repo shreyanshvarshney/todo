@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -35,11 +36,16 @@ export class TodoListComponent implements OnInit, OnDestroy {
 
   getTodos() {
     this.isLoading = true;
-    this.todosSub = this.todoService.getTodos(this.pageSize, this.pageIndex).subscribe((res) => {
+    this.todosSub = this.todoService.getTodos(this.pageSize, this.pageIndex)
+    .subscribe((res) => {
       console.log(res);
       this.isLoading = false;
       this.todos = res.todos;
       this.length = res.count;
+    },
+    (error: HttpErrorResponse) => {
+      console.log(error);
+      this.alertService.openSnackBar(error.error.message);
     });
   }
 
@@ -55,6 +61,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
       this.getTodos();
       console.log(res.message);
       this.alertService.openSnackBar("Deleted Successfully");
+    },
+    (error: HttpErrorResponse) => {
+      console.log(error);
+      this.alertService.openSnackBar(error.error.message);
     });
   }
 
@@ -69,6 +79,10 @@ export class TodoListComponent implements OnInit, OnDestroy {
       this.getTodos();
       console.log(res.message);
       this.alertService.openSnackBar("Deleted all your todos Successfully");
+    },
+    (error: HttpErrorResponse) => {
+      console.log(error);
+      this.alertService.openSnackBar(error.error.message);
     });
   }
 

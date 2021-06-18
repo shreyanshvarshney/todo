@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { AuthService } from './../../../service/auth.service';
 import { AlertService } from 'src/service/alert.service';
@@ -32,6 +33,7 @@ export class SignupComponent implements OnInit {
   onSignup(form: FormGroup) {
     if (form.valid) {
       console.log(form.value);
+      this.isLoading = true;
       this.authService.createUser(form.value)
       .subscribe((res) => {
         console.log(res.message);
@@ -39,8 +41,12 @@ export class SignupComponent implements OnInit {
         this.router.navigate(['/login']);
         this.alertService.openSnackBar("Successfull Signup, Please login with your credentials.", 4000);
       },
-      (error) => {
-        console.log(error);
+      (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        // errorMessage is coming from my server error response.
+        const errorMessage = error.error.message;
+        console.log(error.error.message);
+        this.alertService.openErrorDialog(errorMessage);
       });
     } else {
       Object.keys(form.controls).forEach((field) => {

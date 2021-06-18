@@ -1,6 +1,6 @@
 <p>
     <mat-toolbar color="primary">
-      <span><a class="navbar-brand" routerLink="/">My Todo's</a></span>
+      <span><a class="navbar-brand" routerLink="/todos" routerLinkActive="active">My Todo's</a></span>
       <span *ngIf="loggedIn"><a mat-button routerLink="/create" routerLinkActive="active">Create Todo</a></span>
       <span *ngIf="!loggedIn"><a mat-button routerLink="/login" routerLinkActive="active"><i class="fa fa-user"></i> Login</a></span>
       <button class="ml-3" *ngIf="userDetails && loggedIn" mat-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
