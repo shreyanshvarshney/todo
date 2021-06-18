@@ -57,11 +57,12 @@ export class TodoCreateComponent implements OnInit {
 
   saveTodo(form: FormGroup) {
     if (form.valid) {
+      this.isLoading = true;
       if(!this.todoId) {
         console.log(form.value);
         const obj = {
           ...form.value
-        };        
+        };
         this.todoService.postTodo(obj)
         .subscribe((res) => {
           console.log(res.message);
@@ -69,16 +70,19 @@ export class TodoCreateComponent implements OnInit {
             this.uploadImage(res.todoId);
           }
           else {
+            this.isLoading = false;
             this.alertService.openSnackBar("Added Successfully");
             this.todoForm.reset();
             this.router.navigate(['/todos']);
           }
         },
         (error: HttpErrorResponse) => {
+          this.isLoading = false;
           console.log(error);
           this.alertService.openErrorDialog(error.error.message);
         });
       } else {
+        this.isLoading = true;
         let finalData = this.prepateUpdateAttributes(form);
         // console.log(finalData);
         this.todoService.updateTodo(finalData, this.todoId)
@@ -88,11 +92,13 @@ export class TodoCreateComponent implements OnInit {
             this.uploadImage(this.todoData.id);
           }
           else {
+            this.isLoading = false;
             this.alertService.openSnackBar("Updated Successfully.");
             this.router.navigate(['/todos']);
           }
         },
         (error: HttpErrorResponse) => {
+          this.isLoading = false;
           console.log(error);
           this.alertService.openErrorDialog(error.error.message);
         });
@@ -113,6 +119,7 @@ export class TodoCreateComponent implements OnInit {
     todoData.append('image', this.todoForm.controls.image.value, this.todoForm.controls.title.value);
     this.todoService.uploadTodoImage(todoData)
     .subscribe((res) => {
+      this.isLoading = false;
       console.log(res.message);
       if (this.todoData) {
         this.alertService.openSnackBar("Updated Successfully.");
@@ -121,7 +128,12 @@ export class TodoCreateComponent implements OnInit {
         this.alertService.openSnackBar("Added Successfully");
         this.todoForm.reset();
       }
-      this.router.navigate(['/']);
+      this.router.navigate(['/todos']);
+    },
+    (error: HttpErrorResponse) => {
+      this.isLoading = false;
+      console.log(error);
+      this.alertService.openErrorDialog(error.error.message);
     });
   }
 
