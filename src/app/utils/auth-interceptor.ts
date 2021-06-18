@@ -1,4 +1,6 @@
 // This interceptor is type of Service only.
+// I can also manually add Authorization header in every request, but using this is also a good option
+// with less amount of code and setting auth header Globally in every request.
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";

@@ -6,8 +6,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TodoCreateComponent } from './todos/todo-create/todo-create.component';
-import { TodoListComponent } from './todos/todo-list/todo-list.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -15,21 +13,18 @@ import { DialogErrorComponent } from './error/dialog-error/dialog-error.componen
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
 import { AuthService } from './../service/auth.service';
-import { MaterialModule } from './material.module';
 
-import {QuillModule} from 'ngx-quill';
-import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
 import { AuthInterceptor } from './utils/auth-interceptor';
+
+import { TodosModule } from './todos/todos.module';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TodoCreateComponent,
     HeaderComponent,
     LoginComponent,
     SignupComponent,
-    TodoListComponent,
-    BypassSanitizerPipe,
     DialogErrorComponent
   ],
   imports: [
@@ -39,19 +34,16 @@ import { AuthInterceptor } from './utils/auth-interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+
+    TodosModule,
     MaterialModule,
-    QuillModule.forRoot(),
   ],
   providers: [
     TodoService,
     AuthService,
     AlertService,
     // Configuration of my Auth Interceptor
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
 
