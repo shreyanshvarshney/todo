@@ -15,18 +15,7 @@ import { DialogErrorComponent } from './error/dialog-error/dialog-error.componen
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
 import { AuthService } from './../service/auth.service';
-
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MaterialModule } from './material.module';
 
 import {QuillModule} from 'ngx-quill';
 import { BypassSanitizerPipe } from './utils/bypasssanitizerpipe';
@@ -50,31 +39,13 @@ import { AuthInterceptor } from './utils/auth-interceptor';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatToolbarModule,
-    MatExpansionModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatPaginatorModule,
-    MatMenuModule,
-    MatDialogModule,
+    MaterialModule,
     QuillModule.forRoot(),
   ],
   providers: [
     TodoService,
     AuthService,
     AlertService,
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { color: 'primary' },
-    },
-    {
-      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-      useValue: { color: 'primary' },
-    },
     // Configuration of my Auth Interceptor
     {
       provide: HTTP_INTERCEPTORS,
