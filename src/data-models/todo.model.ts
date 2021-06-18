@@ -2,8 +2,8 @@ export interface Todo {
     id: string;
     title: string;
     content: string;
-    dateCreated: Date;
-    dateUpdated: Date;
+    dateCreated: string;
+    dateUpdated: string;
     updated: boolean;
     imagePath: string;
     userId: string;

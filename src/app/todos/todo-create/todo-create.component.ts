@@ -60,8 +60,7 @@ export class TodoCreateComponent implements OnInit {
       if(!this.todoId) {
         console.log(form.value);
         const obj = {
-          ...form.value,
-          dateCreated: new Date()
+          ...form.value
         };        
         this.todoService.postTodo(obj)
         .subscribe((res) => {
@@ -134,7 +133,7 @@ export class TodoCreateComponent implements OnInit {
       title: form.controls.title.value,
       content: form.controls.content.value,
       updated: true,
-      dateUpdated: new Date()
+      dateUpdated: new Date().toISOString()
     };
   }
 
