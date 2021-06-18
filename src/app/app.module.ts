@@ -7,8 +7,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { LoginComponent } from './auth/login/login.component';
-import { SignupComponent } from './auth/signup/signup.component';
 import { DialogErrorComponent } from './error/dialog-error/dialog-error.component';
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
@@ -17,14 +15,13 @@ import { AuthService } from './../service/auth.service';
 import { AuthInterceptor } from './utils/auth-interceptor';
 
 import { TodosModule } from './todos/todos.module';
+import { AuthModule } from './auth/auth.module';
 import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    LoginComponent,
-    SignupComponent,
     DialogErrorComponent
   ],
   imports: [
@@ -36,8 +33,10 @@ import { MaterialModule } from './material.module';
     HttpClientModule,
 
     TodosModule,
+    AuthModule,
     MaterialModule,
   ],
+  // Services are only provided in my root module as they have only one instance for whole app.
   providers: [
     TodoService,
     AuthService,
