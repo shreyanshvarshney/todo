@@ -31,7 +31,8 @@ export class TodoService {
               dateCreated: res.dateCreated,
               dateUpdated: res.dateUpdated,
               updated: res.updated,
-              imagePath: res.imagePath
+              imagePath: res.imagePath,
+              userId: res.userId
             };
           }),
           count: response.count
@@ -63,7 +64,8 @@ export class TodoService {
           dateCreated: res.todo.dateCreated,
           dateUpdated: res.todo.dateUpdated,
           updated: res.todo.updated,
-          imagePath: res.todo.imagePath
+          imagePath: res.todo.imagePath,
+          userId: res.todo.userId
         };
       }),
     );

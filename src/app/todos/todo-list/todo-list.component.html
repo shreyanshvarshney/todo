@@ -5,7 +5,7 @@
       <i class="fa fa-list"></i>
     </button>
     <mat-menu #menu="matMenu" yPosition="above">
-      <button [disabled]="!authState" (click)="deleteAllTodos()" mat-menu-item>
+      <button [disabled]="!loggedIn" (click)="deleteAllTodos()" mat-menu-item>
         <i class="fa fa-trash btn btn-danger"></i>
         <span class="ml-2"> Delete All</span>
       </button>
@@ -30,10 +30,10 @@
           </mat-card>
           <mat-action-row>
             <p *ngIf="item.updated" class="edited-text text-muted">Edited <i class="fa fa-edit"></i>&nbsp;&nbsp;{{ item.dateUpdated | date:'medium' }}</p>
-            <button [disabled]="!authState" (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <button [disabled]="!loggedIn" (click)="updateTodo(item)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
               <i class="fa fa-edit"></i>
             </button>
-            <button [disabled]="!authState" (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+            <button [disabled]="!loggedIn" (click)="deleteTodo(item?.id)" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
               <i class="fa fa-trash"></i>
             </button>
           </mat-action-row>

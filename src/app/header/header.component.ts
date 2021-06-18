@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/service/auth.service';
+import { User } from './../../data-models/user.model';
 
 @Component({
   selector: 'app-header',
@@ -8,12 +9,16 @@ import { AuthService } from 'src/service/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
-  authState: boolean;
+  loggedIn: boolean;
+  userDetails: User
 
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.authStateListener().subscribe((data) => {this.authState = data});
+    this.authService.authStateListener().subscribe((data) => {
+      this.loggedIn = data?.loggedIn;
+      this.userDetails = data?.userDetails;
+    });
   }
 
   onLogout() {

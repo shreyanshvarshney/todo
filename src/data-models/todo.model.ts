@@ -6,4 +6,5 @@ export interface Todo {
     dateUpdated: Date;
     updated: boolean;
     imagePath: string;
+    userId: string;
 }

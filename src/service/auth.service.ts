@@ -18,7 +18,7 @@ export class AuthService {
   private token: string;
   // Suppose If i logout or clear my token, so I have to inform my subscribers dependent on authState of a user.
   // And will push auth info to the comps. which are interested.
-  private authState = new BehaviorSubject<boolean>(false);
+  private authState = new BehaviorSubject<{loggedIn: boolean, userDetails: User}>(null);
   private tokenTimer: any;
 
   constructor(private http: HttpClient, private router: Router, private alertService: AlertService) { }
@@ -47,13 +47,16 @@ export class AuthService {
       if (res.token) {
         // For displaying JW Token expiration on client side.
         this.setAuthTimer(res.expiresIn);
-        this.authState.next(true);
+        this.authState.next({
+          loggedIn: true,
+          userDetails: res.user
+        });
         console.log(res);
         const now = new Date();
         // Now I will create a new Date object using my calculated miliseconds.
         const expirationDate = new Date(now.getTime() + (res.expiresIn * 1000));
         console.log(expirationDate);
-        this.saveAuthData(res.token, expirationDate);
+        this.saveAuthData(res.token, expirationDate, res.user);
         this.router.navigateByUrl(returnUrl);
         this.alertService.openSnackBar("Login Successfull.");
       }
@@ -74,7 +77,10 @@ export class AuthService {
 
   logout() {
     this.token = null;
-    this.authState.next(false);
+    this.authState.next({
+      loggedIn: false,
+      userDetails: null
+    });
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
     this.router.navigateByUrl('/');
@@ -92,8 +98,11 @@ export class AuthService {
     // If expiresIn is negative or 0 that means my token is expired.
     if (expiresIn > 0) {
       this.setAuthTimer(expiresIn / 1000);
-      this.authState.next(true);
       this.token = authData.token;
+      this.authState.next({
+        loggedIn: true,
+        userDetails: authData.userDetails
+      });
     }
   }
 
@@ -104,26 +113,38 @@ export class AuthService {
     }, duration * 1000);
   }
 
-  private saveAuthData(token: string, expirationDate: Date) {
+  private saveAuthData(token: string, expirationDate: Date, userDetails: User) {
     localStorage.setItem("token", token);
     // ISOString is Serialize and Standard version of the Date which then I can use to re-create it when I read/get the data later.
     localStorage.setItem("expiration", expirationDate.toISOString());
+    localStorage.setItem("id", userDetails.id);
+    localStorage.setItem("name", userDetails.name);
+    localStorage.setItem("email", userDetails.email);
   }
 
   private clearAuthData() {
     localStorage.removeItem("token");
     localStorage.removeItem("expiration");
+    localStorage.removeItem("id");
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
   }
 
   private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
+    const userDetails = {
+      id: localStorage.getItem("id"),
+      name: localStorage.getItem("name"),
+      email: localStorage.getItem("email")
+    };
     // A check to confirm that we have token and expirationDate in localStorage.
-    if(!token || !expirationDate) return;
+    if(!token || !expirationDate || !userDetails) return;
     return {
       token: token,
       // Here I can pass that serialized expression date string and it will construct Date object based on that.
-      expirationDate: new Date(expirationDate)
+      expirationDate: new Date(expirationDate),
+      userDetails: userDetails
     };
   }
 

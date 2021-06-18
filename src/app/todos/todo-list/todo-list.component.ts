@@ -24,19 +24,19 @@ export class TodoListComponent implements OnInit, OnDestroy {
   pageIndex = 0; // Current Page (starting with 0)
   pageSizeOptions = [1, 2, 5, 10];
 
-  authState: boolean;
+  loggedIn: boolean;
 
   constructor(private todoService: TodoService, private router: Router, private alertService: AlertService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.getTodos();
-    this.authService.authStateListener().subscribe((data) => this.authState = data);
+    this.authService.authStateListener().subscribe((data) => this.loggedIn = data?.loggedIn);
   }
 
   getTodos() {
     this.isLoading = true;
     this.todosSub = this.todoService.getTodos(this.pageSize, this.pageIndex).subscribe((res) => {
-      // console.log(res);
+      console.log(res);
       this.isLoading = false;
       this.todos = res.todos;
       this.length = res.count;
