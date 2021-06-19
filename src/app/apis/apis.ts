@@ -2,14 +2,14 @@ import { environment } from './../../environments/environment';
 
 
 export const TodoApis = {
-    getTodosApi: environment.baseUrl + 'api/todos/',
-    postTodosApi: environment.baseUrl + 'api/todos',
-    deleteTodoApi: environment.baseUrl + 'api/todos/',
-    getTodoApi: environment.baseUrl + 'api/todos/',
-    updateTodoApi: environment.baseUrl + 'api/todos/',
-    deleteTodosApi: environment.baseUrl + 'api/todos',
-    imageUploadApi: environment.baseUrl + 'api/upload',
+    getTodosApi: environment.baseUrl + 'todos/',
+    postTodosApi: environment.baseUrl + 'todos',
+    deleteTodoApi: environment.baseUrl + 'todos/',
+    getTodoApi: environment.baseUrl + 'todos/',
+    updateTodoApi: environment.baseUrl + 'todos/',
+    deleteTodosApi: environment.baseUrl + 'todos',
+    imageUploadApi: environment.baseUrl + 'upload',
 
-    signupApi: environment.baseUrl + 'api/user/signup',
-    loginApi: environment.baseUrl + 'api/user/login'
+    signupApi: environment.baseUrl + 'user/signup',
+    loginApi: environment.baseUrl + 'user/login'
 };

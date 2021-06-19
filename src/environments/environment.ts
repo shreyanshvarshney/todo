@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:3000/'
+  // baseUrl: 'http://localhost:3000/api/',
+  baseUrl: "http://nodeangularapp-env.eba-fg8vhask.us-east-2.elasticbeanstalk.com/api/"
 };
 
 /*
