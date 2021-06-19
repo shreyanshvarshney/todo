@@ -157,6 +157,11 @@ export class TodoCreateComponent implements OnInit {
       this.todoData = res;
       this.isLoading = false;
       this.prefillForm(res);
+    },
+    (error: HttpErrorResponse) => {
+      this.isLoading = false;
+      console.log(error);
+      this.alertService.openErrorDialog(error.error.message);
     });
   }
 
