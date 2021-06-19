@@ -69,7 +69,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   updateTodo(item: Todo) {
-    this.router.navigate(['/update',item.id]);
+    this.router.navigate(['/todos/update',item.id]);
   }
 
   deleteAllTodos() {
