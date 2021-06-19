@@ -11,10 +11,10 @@ import { DialogErrorComponent } from './error/dialog-error/dialog-error.componen
 import { TodoService } from './../service/todo.service';
 import { AlertService } from './../service/alert.service';
 import { AuthService } from './../service/auth.service';
+import { AuthGuard } from './../guards/auth.guard';
 
 import { AuthInterceptor } from './utils/auth-interceptor';
 
-import { TodosModule } from './todos/todos.module';
 import { AuthModule } from './auth/auth.module';
 import { MaterialModule } from './material.module';
 
@@ -32,7 +32,7 @@ import { MaterialModule } from './material.module';
     ReactiveFormsModule,
     HttpClientModule,
 
-    TodosModule,
+    // Todos Module is lazy loaded thats why it is not mentioned here but in routing module, otherwise it will be included in this bundle.
     AuthModule,
     MaterialModule,
   ],
@@ -41,6 +41,7 @@ import { MaterialModule } from './material.module';
     TodoService,
     AuthService,
     AlertService,
+    AuthGuard,
     // Configuration of my Auth Interceptor
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],

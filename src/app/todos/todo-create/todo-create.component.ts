@@ -73,7 +73,7 @@ export class TodoCreateComponent implements OnInit {
             this.isLoading = false;
             this.alertService.openSnackBar("Added Successfully");
             this.todoForm.reset();
-            this.router.navigate(['/todos']);
+            this.router.navigate(['/todos/list']);
           }
         },
         (error: HttpErrorResponse) => {
@@ -94,7 +94,7 @@ export class TodoCreateComponent implements OnInit {
           else {
             this.isLoading = false;
             this.alertService.openSnackBar("Updated Successfully.");
-            this.router.navigate(['/todos']);
+            this.router.navigate(['/todos/list']);
           }
         },
         (error: HttpErrorResponse) => {
@@ -128,7 +128,7 @@ export class TodoCreateComponent implements OnInit {
         this.alertService.openSnackBar("Added Successfully");
         this.todoForm.reset();
       }
-      this.router.navigate(['/todos']);
+      this.router.navigate(['/todos/list']);
     },
     (error: HttpErrorResponse) => {
       this.isLoading = false;

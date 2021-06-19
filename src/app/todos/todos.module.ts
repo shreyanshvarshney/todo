@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { TodosRoutingModule } from './todos-routing.module';
 import { BypassSanitizerPipe } from '../utils/bypasssanitizerpipe';
 import { QuillModule } from 'ngx-quill';
 import { MaterialModule } from './../material.module';
@@ -17,6 +18,7 @@ import { TodoListComponent } from './todo-list/todo-list.component';
     ],
     imports: [
         CommonModule,
+        TodosRoutingModule,
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,

@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onLogin(form: FormGroup) {
     if (form.valid) {
       console.log(form.value);
-      this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/todos';
+      this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/todos/list';
       this.isLoading = true;
       this.authService.login(form.value, this.returnUrl);
     } else {
