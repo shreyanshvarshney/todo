@@ -25,50 +25,26 @@ export class AuthService {
 
   createUser(data: AuthData) {
     // const authData: AuthData = {name: data.name, email: data.email, password: data.password};
-    return this.http.post<{message: string, data: User}>(TodoApis.signupApi, data)
-    .pipe(
-      map((res: any) => {
-        return {
-          message: res.message,
-          data: {
-            id: res.data._id,
-            name: res.data.name,
-            email: res.data.email
-          }
-        };
-      })
-    );
+    return this.http.post<{message: string, token: string, user: User, expiresIn: number}>(TodoApis.signupApi, data);
   }
 
-  login(data, returnUrl: string) {
-    return this.http.post<{message: string, token: string, user: User, expiresIn: number}>(TodoApis.loginApi, data)
-    .subscribe((res) => {
-      this.token = res.token;
-      if (res.token) {
-        // For displaying JW Token expiration on client side.
-        this.setAuthTimer(res.expiresIn);
-        this.authState.next({
-          loggedIn: true,
-          userDetails: res.user
-        });
-        console.log(res);
-        const now = new Date();
-        // Now I will create a new Date object using my calculated miliseconds.
-        const expirationDate = new Date(now.getTime() + (res.expiresIn * 1000));
-        console.log(expirationDate);
-        this.saveAuthData(res.token, expirationDate, res.user);
-        this.router.navigateByUrl(returnUrl);
-        this.alertService.openSnackBar("Login Successfull.");
-      }
-    },
-    (error: HttpErrorResponse) => {
-      console.log(error);
-      this.authState.next({
-        loggedIn: false,
-        userDetails: null
-      });
-      this.alertService.openSnackBar(error.error.message);
+  login(data) {
+    return this.http.post<{message: string, token: string, user: User, expiresIn: number}>(TodoApis.loginApi, data);
+  }
+
+  afterAuthentication(token: string, expiresIn: number, user: User) {
+    this.token = token;
+    // For displaying JW Token expiration on client side.
+    this.setAuthTimer(expiresIn);
+    this.authState.next({
+      loggedIn: true,
+      userDetails: user
     });
+    const now = new Date();
+    // Now I will create a new Date object using my calculated miliseconds.
+    const expirationDate = new Date(now.getTime() + (expiresIn * 1000));
+    console.log(expirationDate);
+    this.saveAuthData(token, expirationDate, user);
   }
 
   getToken() {

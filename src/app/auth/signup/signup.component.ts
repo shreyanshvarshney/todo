@@ -36,10 +36,14 @@ export class SignupComponent implements OnInit {
       this.isLoading = true;
       this.authService.createUser(form.value)
       .subscribe((res) => {
-        console.log(res.message);
-        console.log(res.data);
-        this.router.navigate(['/login']);
-        this.alertService.openSnackBar("Successfull Signup, Please login with your credentials.", 4000);
+        console.log(res);
+        // console.log(res.message);
+        // console.log(res.user);
+        if (res.token) {
+          this.authService.afterAuthentication(res.token, res.expiresIn, res.user);
+        }
+        this.router.navigate(['/todos/list']);
+        this.alertService.openSnackBar("Signup Successfull.", 4000);
       },
       (error: HttpErrorResponse) => {
         this.isLoading = false;

@@ -6,25 +6,26 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { AlertService } from 'src/service/alert.service';
 import { AuthService } from 'src/service/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   isLoading = false;
 
   returnUrl: string;
-  authStateSub: Subscription;
+  // authStateSub: Subscription;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private alertService: AlertService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.authStateSub = this.authService.authStateListener().subscribe((data) => {this.isLoading = false});
+    // this.authStateSub = this.authService.authStateListener().subscribe((data) => {this.isLoading = false});
   }
 
   initializeForm() {
@@ -39,7 +40,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       console.log(form.value);
       this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '/todos/list';
       this.isLoading = true;
-      this.authService.login(form.value, this.returnUrl);
+      this.authService.login(form.value)
+      .subscribe((res) => {
+        if (res.token) {
+          this.authService.afterAuthentication(res.token, res.expiresIn, res.user);
+        }
+        this.router.navigateByUrl(this.returnUrl);
+        this.alertService.openSnackBar("Login Successfull.", 4000);
+      },
+      (error: HttpErrorResponse) => {
+        this.isLoading = false;
+        console.log(error);
+        // this.authState.next({
+        //   loggedIn: false,
+        //   userDetails: null
+        // });
+        this.alertService.openSnackBar(error.error.message);
+      });
     } else {
       Object.keys(form.controls).forEach((field) => {
         const control = form.get(field);
@@ -57,8 +74,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls.password;
   }
 
-  ngOnDestroy() {
-    this.authStateSub.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.authStateSub.unsubscribe();
+  // }
 
 }
