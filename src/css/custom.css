@@ -1,4 +1,72 @@
-/* body {
+body {
     padding: 0;
     margin: 0;
-} */
+    box-sizing: border-box;
+}
+
+.header {
+    min-width: fit-content;
+}
+
+.main-body {
+    width: 50%;
+    margin: auto;
+    min-width: 400px;
+}
+
+.responsive-card-content {
+    width: 75%;
+}
+
+/* Responsive CSS starts here */
+
+/* Large devices */
+@media screen and (max-width: 1199.98px) {
+    .main-body {
+        width: 50%;
+        margin: auto;
+    }
+    .responsive-card-content {
+        width: 75%;
+    }
+}
+
+/* Medium devices */
+@media screen and (max-width: 991.98px) {
+    .main-body {
+        width: 60%;
+        margin: auto;
+    }
+    .responsive-card-content {
+        width: 75%;
+    }
+}
+
+/* Small devices */
+@media screen and (max-width: 767.98px) {
+    .main-body {
+        width: 80%;
+        margin: auto;
+    }
+    .responsive-card-content {
+        width: 80%;
+    }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 575.98px) { 
+    /* For preview card in admin product form component */
+    .main-body {
+        width: 100%;
+        margin: auto;
+    }
+
+    .responsive-card-content {
+        width: 100%;
+    }
+    .mat-card-header-text {
+        margin: 0 16px 0 0 !important;
+    }
+}
+    
+/* Responsive CSS ends here */

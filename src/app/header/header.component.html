@@ -1,7 +1,8 @@
-<p>
+<p class="header">
     <mat-toolbar color="primary">
       <span><a class="navbar-brand" routerLink="/todos/list" routerLinkActive="active">My Todo's</a></span>
       <span *ngIf="loggedIn"><a mat-button routerLink="/todos/create" routerLinkActive="active">Create Todo</a></span>
+      <span class="spacer"></span>
       <span *ngIf="!loggedIn"><a mat-button routerLink="/login" routerLinkActive="active"><i class="fa fa-user"></i> Login</a></span>
       <button class="ml-3" *ngIf="userDetails && loggedIn" mat-button [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
         {{userDetails.name}} &nbsp;<i class="fa fa-caret-down"></i>
