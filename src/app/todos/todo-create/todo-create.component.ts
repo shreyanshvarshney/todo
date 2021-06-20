@@ -61,7 +61,9 @@ export class TodoCreateComponent implements OnInit {
       if(!this.todoId) {
         console.log(form.value);
         const obj = {
-          ...form.value
+          title: form.controls.title.value,
+          content: form.controls.content.value
+          // Not sending the image form control to server.
         };
         this.todoService.postTodo(obj)
         .subscribe((res) => {
