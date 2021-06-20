@@ -71,7 +71,7 @@ export class TodoService {
     );
   }
 
-  updateTodo(data: Todo, todoId: string) {
+  updateTodo(data, todoId: string) {
     return this.http.patch<{message: string}>(TodoApis.updateTodoApi + todoId, data);
   }
 

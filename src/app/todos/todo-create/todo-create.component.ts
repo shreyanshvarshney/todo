@@ -86,7 +86,7 @@ export class TodoCreateComponent implements OnInit {
       } else {
         this.isLoading = true;
         let finalData = this.prepateUpdateAttributes(form);
-        // console.log(finalData);
+        console.log(finalData);
         this.todoService.updateTodo(finalData, this.todoId)
         .subscribe((res) => {
           console.log(res.message);
@@ -141,13 +141,17 @@ export class TodoCreateComponent implements OnInit {
 
   prepateUpdateAttributes(form: FormGroup) {
     return {
-      ...this.todoData,
+      // ...this.todoData,
       // This will overwrite the exsisting values, functionality of spread operator.
       // Can also write ...form.value
       title: form.controls.title.value,
       content: form.controls.content.value,
-      updated: true,
-      dateUpdated: new Date().toISOString()
+      imagePath: this.todoData.imagePath,
+      // id: "", // Send todo id by route parameter to the server
+      // dateUpdated: "", // Not assigning dateUpdated any value, becoz managing it on the server, assigning null value to maintain Todo model
+      // updated: true, // Not assigning updated any value, becoz managing it on the server
+      // userId: "", // Not sending the userId/creator of this todo from client as it can be manupulated, taking it from auth token on server
+      // dateCreated: "" // Already on my server
     };
   }
 
