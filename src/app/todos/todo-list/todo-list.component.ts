@@ -39,6 +39,11 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.todosSub = this.todoService.getTodos(this.pageSize, this.pageIndex)
     .subscribe((res) => {
       console.log(res);
+      // A check when a last todo is deleted on a last page index of pagination.
+      if(res.todos.length === 0 && this.pageIndex > 0) {
+        this.pageIndex = 0;
+        this.getTodos();
+      }
       this.isLoading = false;
       this.todos = res.todos;
       this.length = res.count;
