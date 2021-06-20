@@ -1,6 +1,5 @@
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
@@ -19,13 +18,11 @@ export class LoginComponent implements OnInit {
   isLoading = false;
 
   returnUrl: string;
-  // authStateSub: Subscription;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private alertService: AlertService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    // this.authStateSub = this.authService.authStateListener().subscribe((data) => {this.isLoading = false});
   }
 
   initializeForm() {
@@ -51,10 +48,6 @@ export class LoginComponent implements OnInit {
       (error: HttpErrorResponse) => {
         this.isLoading = false;
         console.log(error);
-        // this.authState.next({
-        //   loggedIn: false,
-        //   userDetails: null
-        // });
         this.alertService.openSnackBar(error.error.message);
       });
     } else {
@@ -73,9 +66,5 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.controls.password;
   }
-
-  // ngOnDestroy() {
-  //   this.authStateSub.unsubscribe();
-  // }
 
 }
